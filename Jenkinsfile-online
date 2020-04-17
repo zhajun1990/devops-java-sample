@@ -13,7 +13,7 @@ pipeline {
         DOCKER_CREDENTIAL_ID = 'dockerhub-id'
         GITHUB_CREDENTIAL_ID = 'github-id'
         KUBECONFIG_CREDENTIAL_ID = 'demo-kubeconfig'
-        REGISTRY = 'hub.hasebook.com'
+        REGISTRY = '192.168.1.10'
         DOCKERHUB_NAMESPACE = 'javauser'
         GITHUB_ACCOUNT = 'zhajun1990'
         APP_NAME = 'devops-java-sample'
@@ -57,11 +57,6 @@ pipeline {
                     sh 'docker build -f Dockerfile-online -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER .'                 
                     withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
                         sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
-                        sh 'echo "$REGISTRY"'
-                        sh 'echo "$DOCKERHUB_NAMESPACE"'
-                        sh 'echo "$APP_NAME"'
-                        sh 'echo "$BRANCH_NAME"'
-                        sh 'echo "$BUILD_NUMBER"'
                         sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER'                       
                     }
                 }
